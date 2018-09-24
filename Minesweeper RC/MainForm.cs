@@ -64,12 +64,12 @@ namespace Minesweeper_RC
         {
             // reveal and render cell
             var control = (Control)sender;
-            var cell = _game.Reveal(x, y);
+            var revealedCells = _game.Reveal(x, y);
             var value = new Label()
             {
                 Size = control.Size,
                 Location = control.Location,
-                Text = cell.IsMine ? "M" : cell.Neighbours > 0 ? cell.Neighbours.ToString() : ""
+                Text = revealedCells[0].IsMine ? "M" : revealedCells[0].Neighbours > 0 ? revealedCells[0].Neighbours.ToString() : ""
             };
             this.Controls.Remove(control);
 

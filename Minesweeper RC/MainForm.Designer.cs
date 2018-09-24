@@ -28,23 +28,23 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.MainMenuStrip = new System.Windows.Forms.MenuStrip();
+            this.TopMenuStrip = new System.Windows.Forms.MenuStrip();
             this.GameMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.BeginnerGameMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.IntermediateGameMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.ExpertGameMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.MainMenuStrip.SuspendLayout();
+            this.TopMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
-            // MainMenuStrip
+            // TopMenuStrip
             // 
-            this.MainMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.TopMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.GameMenu});
-            this.MainMenuStrip.Location = new System.Drawing.Point(0, 0);
-            this.MainMenuStrip.Name = "MainMenuStrip";
-            this.MainMenuStrip.Size = new System.Drawing.Size(678, 24);
-            this.MainMenuStrip.TabIndex = 0;
-            this.MainMenuStrip.Text = "menuStrip1";
+            this.TopMenuStrip.Location = new System.Drawing.Point(0, 0);
+            this.TopMenuStrip.Name = "TopMenuStrip";
+            this.TopMenuStrip.Size = new System.Drawing.Size(678, 24);
+            this.TopMenuStrip.TabIndex = 0;
+            this.TopMenuStrip.Text = "menuStrip1";
             // 
             // GameMenu
             // 
@@ -85,15 +85,14 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(678, 466);
-            this.Controls.Add(this.MainMenuStrip);
+            this.Controls.Add(this.TopMenuStrip);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
-            this.MainMenuStrip = this.MainMenuStrip;
             this.MaximizeBox = false;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Minesweeper RC";
-            this.MainMenuStrip.ResumeLayout(false);
-            this.MainMenuStrip.PerformLayout();
+            this.TopMenuStrip.ResumeLayout(false);
+            this.TopMenuStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -101,7 +100,7 @@
 
         #endregion
 
-        private System.Windows.Forms.MenuStrip MainMenuStrip;
+        private System.Windows.Forms.MenuStrip TopMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem GameMenu;
         private System.Windows.Forms.ToolStripMenuItem BeginnerGameMenu;
         private System.Windows.Forms.ToolStripMenuItem IntermediateGameMenu;

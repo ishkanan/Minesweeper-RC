@@ -18,84 +18,59 @@ namespace Minesweeper_RC_Test
         public void TestGetPropertiesAfterInstantiate()
         {
             var cell = new Cell(true, 1, 5, 10);
-            Assert.AreEqual(cell.IsFlagged, false);
-            Assert.AreEqual(cell.IsMine, true);
-            Assert.AreEqual(cell.IsRevealed, false);
-            Assert.AreEqual(cell.Neighbours, 1);
-            Assert.AreEqual(cell.Location, new Point(5, 10));
-            Assert.AreEqual(cell.Locked, false);
+            Assert.AreEqual(false, cell.IsFlagged);
+            Assert.AreEqual(true, cell.IsMine);
+            Assert.AreEqual(false, cell.IsRevealed);
+            Assert.AreEqual(1, cell.Neighbours);
+            Assert.AreEqual(new Point(5, 10), cell.Location);
+            Assert.AreEqual(false, cell.Locked);
         }
 
         [TestMethod]
-        public void TestGetPropertiesAfterLockAndReveal()
+        public void TestGetPropertiesAfterLock()
         {
             var cell = new Cell(true, 1, 5, 10);
             cell.Lock();
-            cell.Reveal();
-            Assert.AreEqual(cell.IsFlagged, false);
-            Assert.AreEqual(cell.IsMine, true);
-            Assert.AreEqual(cell.IsRevealed, true);
-            Assert.AreEqual(cell.Neighbours, 1);
-            Assert.AreEqual(cell.Location, new Point(5, 10));
-            Assert.AreEqual(cell.Locked, true);
+            Assert.AreEqual(false, cell.IsFlagged);
+            Assert.AreEqual(true, cell.IsMine);
+            Assert.AreEqual(false, cell.IsRevealed);
+            Assert.AreEqual(1, cell.Neighbours, 1);
+            Assert.AreEqual(new Point(5, 10), cell.Location);
+            Assert.AreEqual(true, cell.Locked);
         }
 
         [TestMethod]
-        public void TestGetPropertiesAfterLockNoReveal()
-        {
-            var cell = new Cell(true, 1, 5, 10);
-            cell.Lock();
-            Assert.AreEqual(cell.IsFlagged, false);
-            Assert.ThrowsException<InvalidOperationException>(() => cell.IsMine);
-            Assert.AreEqual(cell.IsRevealed, false);
-            Assert.ThrowsException<InvalidOperationException>(() => cell.Neighbours);
-            Assert.AreEqual(cell.Location, new Point(5, 10));
-            Assert.AreEqual(cell.Locked, true);
-        }
-
-        [TestMethod]
-        public void TestGetPropertiesAfterRevealNoUnlock()
-        {
-            var cell = new Cell(true, 1, 5, 10);
-            cell.Reveal();
-            Assert.AreEqual(cell.IsFlagged, false);
-            Assert.AreEqual(cell.IsMine, true);
-            Assert.AreEqual(cell.IsRevealed, true);
-            Assert.AreEqual(cell.Neighbours, 1);
-            Assert.AreEqual(cell.Location, new Point(5, 10));
-            Assert.AreEqual(cell.Locked, false);
-        }
-
-        [TestMethod]
-        public void TestSetIsFlagged()
+        public void TestToggleIsFlagged()
         {
             var cell = new Cell(true, 1, 5, 10) { IsFlagged = true };
-            Assert.AreEqual(cell.IsFlagged, true);
+            Assert.AreEqual(true, cell.IsFlagged);
+            cell.IsFlagged = false;
+            Assert.AreEqual(false, cell.IsFlagged);
         }
 
         [TestMethod]
-        public void TestSetIsMine()
+        public void TestSetIsMineBeforeAndAfterLock()
         {
             var cell = new Cell(true, 1, 5, 10) { IsMine = false };
-            Assert.AreEqual(cell.IsMine, false);
+            Assert.AreEqual(false, cell.IsMine);
             cell.Lock();
             Assert.ThrowsException<InvalidOperationException>(() => cell.IsMine = true);
         }
 
         [TestMethod]
-        public void TestSetLocation()
+        public void TestSetLocationBeforeAndAfterLock()
         {
             var cell = new Cell(true, 1, 5, 10) { Location = new Point(2, 3) };
-            Assert.AreEqual(cell.Location, new Point(2, 3));
+            Assert.AreEqual(new Point(2, 3), cell.Location);
             cell.Lock();
             Assert.ThrowsException<InvalidOperationException>(() => cell.Location = new Point(5, 10));
         }
 
         [TestMethod]
-        public void TestSetNeighbours()
+        public void TestSetNeighboursBeforeAndAfterLock()
         {
             var cell = new Cell(true, 1, 5, 10) { Neighbours = 2 };
-            Assert.AreEqual(cell.Neighbours, 2);
+            Assert.AreEqual(2, cell.Neighbours);
             cell.Lock();
             Assert.ThrowsException<InvalidOperationException>(() => cell.Neighbours = 1);
         }

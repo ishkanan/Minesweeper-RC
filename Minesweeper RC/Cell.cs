@@ -9,14 +9,12 @@ namespace Minesweeper_RC
         private int _neighbours;
         private Point _location;
 
+        /// <summary>
+        /// Gets or sets if this cell contains a mine.
+        /// </summary>
         public bool IsMine
         {
-            get
-            {
-                if (Locked && !IsRevealed)
-                    throw new InvalidOperationException("Cell is not revealed");
-                return _isMine;
-            }
+            get => _isMine;
             set
             {
                 if (Locked)
@@ -25,6 +23,9 @@ namespace Minesweeper_RC
             }
         }
 
+        /// <summary>
+        /// Gets or sets if this cell is flagged as a mine.
+        /// </summary>
         public bool IsFlagged
         {
             get;
@@ -40,14 +41,12 @@ namespace Minesweeper_RC
             private set;
         }
 
+        /// <summary>
+        /// Gets or sets the number of mines adjacent to this cell.
+        /// </summary>
         public int Neighbours
         {
-            get
-            {
-                if (Locked && !IsRevealed)
-                    throw new InvalidOperationException("Cell is not revealed");
-                return _neighbours;
-            }
+            get => _neighbours;
             set
             {
                 if (Locked)
@@ -70,7 +69,7 @@ namespace Minesweeper_RC
         public bool IsRevealed
         {
             get;
-            private set;
+            set;
         }
 
         public Cell(bool isMine, int neighbours, int x, int y)
@@ -89,11 +88,6 @@ namespace Minesweeper_RC
         public void Lock()
         {
             Locked = true;
-        }
-
-        public void Reveal()
-        {
-            IsRevealed = true;
         }
     }
 }

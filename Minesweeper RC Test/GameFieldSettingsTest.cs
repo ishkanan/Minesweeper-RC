@@ -17,9 +17,9 @@ namespace Minesweeper_RC_Test
         public void TestGetPropertiesAfterInstantiate()
         {
             var settings = new Game.FieldSettings(10, 20, 5);
-            Assert.AreEqual(settings.Width, 10);
-            Assert.AreEqual(settings.Height, 20);
-            Assert.AreEqual(settings.MineCount, 5);
+            Assert.AreEqual(10, settings.Width);
+            Assert.AreEqual(20, settings.Height);
+            Assert.AreEqual(5, settings.MineCount);
         }
 
         [TestMethod]
