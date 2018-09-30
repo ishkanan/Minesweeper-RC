@@ -57,12 +57,10 @@ namespace Minesweeper_RC
             Expert
         }
 
-        private Cell[,] _mineField;
-
-        public Cell[,] Minefield
+        public Field Minefield
         {
-            get => (Cell[,])_mineField.Clone();
-            private set => _mineField = value;
+            get;
+            private set;
         }
 
         public GameState State
@@ -72,12 +70,6 @@ namespace Minesweeper_RC
         }
 
         public SkillLevel Level
-        {
-            get;
-            private set;
-        }
-
-        public Point Start
         {
             get;
             private set;
@@ -100,10 +92,8 @@ namespace Minesweeper_RC
             Level = level;
             State = GameState.Stopped;
             Settings = GetFieldSettings(level);
-            var result = Field.Generate(Settings.Width, Settings.Height, Settings.MineCount);
-            // yep .NET is still somewhat retarded and can't do unpacking...
-            Start = result.Item1;
-            Minefield = result.Item2;
+            Minefield = new Field(Settings.Width, Settings.Height, Settings.MineCount);
+            Result = null;
         }
 
         /// <summary>
@@ -125,7 +115,7 @@ namespace Minesweeper_RC
                 throw new ArgumentOutOfRangeException("y");
 
             // reveal cell
-            var cell = Minefield[x, y];
+            var cell = Minefield.Get(x, y);
             if (cell.IsRevealed)
                 throw new InvalidOperationException("Cell is already revealed");
             if (cell.IsFlagged)
@@ -134,7 +124,7 @@ namespace Minesweeper_RC
             _numRevealed++;
 
             // is the game over?
-            if (cell.IsMine || Minefield.Length - Settings.MineCount == _numRevealed)
+            if (cell.IsMine || Minefield.AsFlatArray().Length - Settings.MineCount == _numRevealed)
             {
                 State = GameState.Stopped;
                 Result = cell.IsMine ? GameResult.Failure : GameResult.Success;
@@ -144,10 +134,10 @@ namespace Minesweeper_RC
                 {
                     for (var fx = 0; fx < Settings.Width; fx++)
                     {
-                        if (!Minefield[x, y].IsRevealed)
+                        if (!Minefield.Get(x, y).IsRevealed)
                         {
-                            Minefield[x, y].IsRevealed = true;
-                            revealedCells.Add(Minefield[x, y]);
+                            Minefield.Get(x, y).IsRevealed = true;
+                            revealedCells.Add(Minefield.Get(x, y));
                         }
                     }
                 }
@@ -160,10 +150,10 @@ namespace Minesweeper_RC
                 var revealedCells = new List<Cell> { cell };
                 Field.GetAdjacentPoints(cell.Location, Settings.Width, Settings.Height).ToList().ForEach(p =>
                 {
-                    var adjacent = Minefield[p.X, p.Y];
+                    var adjacent = Minefield.Get(p.X, p.Y);
                     if (!adjacent.IsMine && !adjacent.IsRevealed)
                     {
-                        // recursively reveal if the adjacent is also a blank, else just reveal it
+                        // recursively reveal if the adjacent is also a blank, otherwise just reveal it
                         if (adjacent.Neighbours == 0)
                             revealedCells.AddRange(Reveal(adjacent.Location.X, adjacent.Location.Y));
                         else
