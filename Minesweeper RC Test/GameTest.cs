@@ -101,5 +101,45 @@ namespace Minesweeper_RC_Test
             cell.IsFlagged = true;
             Assert.ThrowsException<InvalidOperationException>(() => game.Reveal(cell.Location));
         }
+
+        [TestMethod]
+        public void TestRevealSafeStartingLocation()
+        {
+            var game = new Game(Game.SkillLevel.Beginner);
+            game.Start();
+            var revealedCells = game.Reveal(game.Minefield.SafeStartLocation);
+            var adjacents = Field.GetAdjacentPoints(game.Minefield.SafeStartLocation, game.Minefield.FieldSize.Width, game.Minefield.FieldSize.Height);
+            // we don't know how many cells will be revealed, but must be at least
+            // the safe starting space + adjacent cells
+            Assert.AreEqual(true, revealedCells.Length >= 1 + adjacents.Length);
+        }
+
+        [TestMethod]
+        public void TestRevealMineEndsTheGameWithFailure()
+        {
+            var game = new Game(Game.SkillLevel.Beginner);
+            game.Start();
+            var mineCell = game.Minefield.AsFlatArray().ToList().Find(c => c.IsMine);
+            var revealedCells = game.Reveal(mineCell.Location);
+            // all cells will be revealed as the mine is the first cell to be revealed
+            Assert.AreEqual(game.Minefield.FieldSize.Width * game.Minefield.FieldSize.Height, revealedCells.Length);
+            Assert.AreEqual(Game.GameState.Stopped, game.State);
+            Assert.AreEqual(Game.GameResult.Failure, game.Result);
+        }
+
+        [TestMethod]
+        public void TestAllRevealedEndsTheGameWithSuccess()
+        {
+            var game = new Game(Game.SkillLevel.Beginner);
+            game.Start();
+            // reveal each non-mine cell (obviously cheating here)
+            foreach (var c in game.Minefield.AsFlatArray())
+            {
+                if (!c.IsMine && !c.IsRevealed)
+                    game.Reveal(c.Location);
+            }
+            Assert.AreEqual(Game.GameState.Stopped, game.State);
+            Assert.AreEqual(Game.GameResult.Success, game.Result);
+        }
     }
 }

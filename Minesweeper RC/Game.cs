@@ -155,10 +155,11 @@ namespace Minesweeper_RC
                 {
                     for (var fx = 0; fx < Settings.Width; fx++)
                     {
-                        if (!Minefield.Get(x, y).IsRevealed)
+                        cell = Minefield.Get(fx, fy);
+                        if (!cell.IsRevealed)
                         {
-                            Minefield.Get(x, y).IsRevealed = true;
-                            revealedCells.Add(Minefield.Get(x, y));
+                            cell.IsRevealed = true;
+                            revealedCells.Add(cell);
                         }
                     }
                 }
@@ -176,10 +177,11 @@ namespace Minesweeper_RC
                     {
                         // recursively reveal if the adjacent is also a blank, otherwise just reveal it
                         if (adjacent.Neighbours == 0)
-                            revealedCells.AddRange(Reveal(adjacent.Location.X, adjacent.Location.Y));
+                            revealedCells.AddRange(Reveal(adjacent.Location));
                         else
                         {
                             adjacent.IsRevealed = true;
+                            _numRevealed++;
                             revealedCells.Add(adjacent);
                         }
                     }
