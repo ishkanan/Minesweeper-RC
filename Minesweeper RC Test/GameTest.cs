@@ -47,5 +47,59 @@ namespace Minesweeper_RC_Test
                     numMines = (game.Minefield.Get(x, y).IsMine ? numMines + 1 : numMines);
             Assert.AreEqual(settings.MineCount, numMines);
         }
+
+        [TestMethod]
+        public void TestStartSuccessAndFail()
+        {
+            var game = new Game(Game.SkillLevel.Beginner);
+            Assert.AreEqual(Game.GameState.Stopped, game.State);
+            game.Start();
+            Assert.AreEqual(Game.GameState.Running, game.State);
+            game.Start();
+
+            // end the game and set a result
+            var gamePrivate = new PrivateObject(game);
+            gamePrivate.SetProperty("Result", Game.GameResult.Failure);
+            gamePrivate.SetProperty("State", Game.GameState.Stopped);
+            Assert.ThrowsException<InvalidOperationException>(() => game.Start());
+        }
+
+        [TestMethod]
+        public void TestRevealNotStarted()
+        {
+            var game = new Game(Game.SkillLevel.Beginner);
+            Assert.ThrowsException<InvalidOperationException>(() => game.Reveal(3, 3));
+        }
+
+        [TestMethod]
+        public void TestRevealInvalidParams()
+        {
+            var game = new Game(Game.SkillLevel.Beginner);
+            game.Start();
+
+            foreach (int x in new int[] { -3, -2, -1, game.Settings.Width, game.Settings.Width + 1, game.Settings.Width + 2 })
+                Assert.ThrowsException<ArgumentOutOfRangeException>(() => game.Reveal(x, 3));
+            foreach (int y in new int[] { -3, -2, -1, game.Settings.Height, game.Settings.Height + 1, game.Settings.Height + 2 })
+                Assert.ThrowsException<ArgumentOutOfRangeException>(() => game.Reveal(3, y));
+        }
+
+        [TestMethod]
+        public void TestRevealAlreadyRevealed()
+        {
+            var game = new Game(Game.SkillLevel.Beginner);
+            game.Start();
+            game.Reveal(game.Minefield.SafeStartLocation);
+            Assert.ThrowsException<InvalidOperationException>(() => game.Reveal(game.Minefield.SafeStartLocation));
+        }
+
+        [TestMethod]
+        public void TestRevealFlaggedCell()
+        {
+            var game = new Game(Game.SkillLevel.Beginner);
+            game.Start();
+            var cell = game.Minefield.Get(game.Minefield.SafeStartLocation);
+            cell.IsFlagged = true;
+            Assert.ThrowsException<InvalidOperationException>(() => game.Reveal(cell.Location));
+        }
     }
 }

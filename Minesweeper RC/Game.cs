@@ -97,6 +97,27 @@ namespace Minesweeper_RC
         }
 
         /// <summary>
+        /// Starts the game. This does nothing if game is already started.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">If game has already been played.</exception>
+        public void Start()
+        {
+            if (Result != null)
+                throw new InvalidOperationException("Game has expired");
+            State = GameState.Running;
+        }
+
+        /// <summary>
+        /// See documentation for Reveal(x, y).
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
+        public Cell[] Reveal(Point p)
+        {
+            return Reveal(p.X, p.Y);
+        }
+
+        /// <summary>
         /// Reveals a cell at the specified location. If cell is a mine, the game ends with a failed result.
         /// If the cell is a blank (no adjacent mines), all adjacent unrevealed non-mine cells are also revealed.
         /// If only mines are left, regardless of flag status, the game ends with a success result.
