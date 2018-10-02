@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Minesweeper_RC.Model;
+using System;
 using System.Drawing;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Minesweeper_RC;
 
-namespace Minesweeper_RC_Test
+namespace Minesweeper_RC_Test.Model
 {
     [TestClass]
     public class GameTest

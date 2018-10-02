@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 
-namespace Minesweeper_RC
+namespace Minesweeper_RC.Model
 {
     public class Game
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 
-namespace Minesweeper_RC
+namespace Minesweeper_RC.Model
 {
     public class Cell
     {

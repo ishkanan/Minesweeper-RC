@@ -1,8 +1,7 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Minesweeper_RC;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Minesweeper_RC.Model;
 
-namespace Minesweeper_RC_Test
+namespace Minesweeper_RC_Test.Model
 {
     [TestClass]
     public class GameFieldSettingsTest
