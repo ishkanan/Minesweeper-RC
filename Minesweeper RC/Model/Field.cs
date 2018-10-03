@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Minesweeper_RC.Model
 {
-    public class Field
+    public class Field: IField
     {
         private Cell[,] _field;
         private Size _fieldSize;
@@ -187,5 +187,20 @@ namespace Minesweeper_RC.Model
             }
             return points.ToArray();
         }
+    }
+
+    /// <summary>
+    /// Interface of a minefield.
+    /// </summary>
+    public interface IField
+    {
+        Size FieldSize { get; }
+        int TotalMines { get; }
+        Cell[,] As2DArray();
+        Cell[] AsFlatArray();
+        Point SafeStartLocation { get; }
+        Cell Get(Point p);
+        Cell Get(int x, int y);
+        Cell[] Get(Point[] locations);
     }
 }
