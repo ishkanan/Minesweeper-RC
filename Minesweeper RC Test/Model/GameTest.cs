@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Minesweeper_RC.Model;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 
@@ -119,7 +120,7 @@ namespace Minesweeper_RC_Test.Model
         {
             var game = new Game(SkillLevel.Beginner);
             game.Start();
-            var mineCell = game.Minefield.AsFlatArray().ToList().Find(c => c.IsMine);
+            var mineCell = game.Minefield.First(c => c.IsMine);
             var revealedCells = game.Reveal(mineCell.Location);
             // all cells will be revealed as the mine is the first cell to be revealed
             Assert.AreEqual(game.Minefield.FieldSize.Width * game.Minefield.FieldSize.Height, revealedCells.Length);
@@ -133,7 +134,7 @@ namespace Minesweeper_RC_Test.Model
             var game = new Game(SkillLevel.Beginner);
             game.Start();
             // reveal each non-mine cell (obviously cheating here)
-            foreach (var c in game.Minefield.AsFlatArray())
+            foreach (var c in game.Minefield)
             {
                 if (!c.IsMine && !c.IsRevealed)
                     game.Reveal(c.Location);

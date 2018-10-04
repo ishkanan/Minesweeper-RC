@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using Minesweeper_RC.Extensions;
 
 namespace Minesweeper_RC.Model
 {
-    public class Field: IField
+    public class Field: IField, IEnumerable<Cell>
     {
         private Cell[,] _field;
         private Size _fieldSize;
@@ -17,6 +19,11 @@ namespace Minesweeper_RC.Model
         {
             get => new Size(_fieldSize.Width, _fieldSize.Height);
             private set => _fieldSize = value;
+        }
+
+        public int CellCount
+        {
+            get => FieldSize.Width * FieldSize.Height;
         }
 
         public int TotalMines
@@ -33,17 +40,6 @@ namespace Minesweeper_RC.Model
         public Cell[,] As2DArray()
         {
             return (Cell[,])_field.Clone();
-        }
-
-        /// <summary>
-        /// Returns the field as a flat (1D) array, with rows laid out
-        /// in sequential form.
-        /// </summary>
-        /// <returns>The array representing the field. Modifying the
-        /// array does not modify the original field object.</returns>
-        public Cell[] AsFlatArray()
-        {
-            return _field.Cast<Cell>().ToArray();
         }
 
         /// <summary>
@@ -187,6 +183,29 @@ namespace Minesweeper_RC.Model
             }
             return points.ToArray();
         }
+
+        /// <summary>
+        /// Returns a typed enumerator that enumerates all cells.
+        /// </summary>
+        /// <returns>The enumerator.</returns>
+        public IEnumerator<Cell> GetEnumerator()
+        {
+            return _field.Flatten().OfType<Cell>().GetEnumerator();
+        }
+
+        /// <summary>
+        /// Returns an untyped enumerator that enumerates all cells.
+        /// </summary>
+        /// <returns>The enumerator.</returns>
+        IEnumerator<Cell> IEnumerable<Cell>.GetEnumerator()
+        {
+            return this.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this.GetEnumerator();
+        }
     }
 
     /// <summary>
@@ -197,7 +216,6 @@ namespace Minesweeper_RC.Model
         Size FieldSize { get; }
         int TotalMines { get; }
         Cell[,] As2DArray();
-        Cell[] AsFlatArray();
         Point SafeStartLocation { get; }
         Cell Get(Point p);
         Cell Get(int x, int y);

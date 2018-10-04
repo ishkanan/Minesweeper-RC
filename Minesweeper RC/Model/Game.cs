@@ -112,7 +112,7 @@ namespace Minesweeper_RC.Model
             _numRevealed++;
 
             // is the game over?
-            if (cell.IsMine || Minefield.AsFlatArray().Length - Settings.MineCount == _numRevealed)
+            if (cell.IsMine || Minefield.CellCount - Settings.MineCount == _numRevealed)
             {
                 State = GameState.Stopped;
                 Result = cell.IsMine ? GameResult.Failure : GameResult.Success;

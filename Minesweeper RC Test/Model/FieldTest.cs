@@ -70,7 +70,7 @@ namespace Minesweeper_RC_Test.Model
         public void TestValidNeighbourValues()
         {
             var field = new Field(5, 5, 7);
-            foreach (var cell in field.AsFlatArray())
+            foreach (var cell in field)
             {
                 // tally up actual neighbour mine count
                 var adjacents = Field.GetAdjacentPoints(cell.Location, 5, 5);
@@ -121,6 +121,15 @@ namespace Minesweeper_RC_Test.Model
                 Assert.ThrowsException<ArgumentOutOfRangeException>(() => Field.GetAdjacentPoints(center, i, 5));
                 Assert.ThrowsException<ArgumentOutOfRangeException>(() => Field.GetAdjacentPoints(center, 5, i));
             }
+        }
+
+        [TestMethod]
+        public void TestFieldCellCountIsCorrect()
+        {
+            var field = new Field(5, 5, 5);
+            Assert.AreEqual<int>(25, field.CellCount);
+            field = new Field(4, 6, 1);
+            Assert.AreEqual<int>(24, field.CellCount);
         }
     }
 }
