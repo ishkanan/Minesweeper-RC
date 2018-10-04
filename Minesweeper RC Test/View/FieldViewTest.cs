@@ -63,5 +63,14 @@ namespace Minesweeper_RC_Test.View
             v.RenderField(field);
             Assert.AreEqual<Size>(v.CellSize.MultiplyBy(5, 5), v.Size);
         }
+
+        [TestMethod]
+        public void TestAllowInputSetsEnabled()
+        {
+            var v = new FieldView();
+            var initState = v.Enabled;
+            ((IFieldView)v).AllowInput = !initState;
+            Assert.AreEqual<bool>(!initState, v.Enabled);
+        }
     }
 }

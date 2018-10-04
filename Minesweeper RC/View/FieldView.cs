@@ -51,6 +51,15 @@ namespace Minesweeper_RC.View
             Size = field.FieldSize.MultiplyBy(_cellSize.Width, _cellSize.Height);
         }
 
+        public bool AllowInput
+        {
+            get => this.Enabled;
+            set
+            {
+                this.Enabled = value;
+            }
+        }
+
         private void Cell_MouseUp(object sender, MouseEventArgs e, Cell cell)
         {
             CellClick?.Invoke(cell, e.Button);
@@ -73,6 +82,10 @@ namespace Minesweeper_RC.View
         /// </summary>
         /// <param name="field">The field to render.</param>
         void RenderField(IField field);
+        /// <summary>
+        /// Determines if the user can click cells.
+        /// </summary>
+        bool AllowInput { get; set; }
     }
 
     /// <summary>
