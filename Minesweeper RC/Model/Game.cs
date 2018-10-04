@@ -9,19 +9,6 @@ namespace Minesweeper_RC.Model
     {
         private int _numRevealed;
 
-        public class FieldSettings
-        {
-            public int Width { get; private set; }
-            public int Height { get; private set; }
-            public int MineCount { get; private set; }
-            public FieldSettings(int width, int height, int mineCount)
-            {
-                Width = width;
-                Height = height;
-                MineCount = mineCount;
-            }
-        }
-
         public static FieldSettings GetFieldSettings(SkillLevel level)
         {
             switch (level)
@@ -191,5 +178,13 @@ namespace Minesweeper_RC.Model
 
             return new Cell[] { cell };
         }
+    }
+
+    /// <summary>
+    /// Interface for a game instance.
+    /// </summary>
+    public interface IGame
+    {
+
     }
 }

@@ -67,7 +67,7 @@
     <Compile Include="Model\CellTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\GameTest.cs" />
-    <Compile Include="Model\GameFieldSettingsTest.cs" />
+    <Compile Include="Model\FieldSettingsTest.cs" />
     <Compile Include="Model\FieldTest.cs" />
     <Compile Include="ExtensionsTest.cs" />
     <Compile Include="View\FieldViewTest.cs" />

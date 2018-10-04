@@ -18,7 +18,7 @@ namespace Minesweeper_RC_Test.Model
         [TestMethod]
         public void TestGetFieldSettingsNoError()
         {
-            Assert.IsInstanceOfType(Game.GetFieldSettings(Game.SkillLevel.Beginner), typeof(Game.FieldSettings));
+            Assert.IsInstanceOfType(Game.GetFieldSettings(Game.SkillLevel.Beginner), typeof(FieldSettings));
         }
 
         [TestMethod]
@@ -27,7 +27,7 @@ namespace Minesweeper_RC_Test.Model
             var game = new Game(Game.SkillLevel.Beginner);
             Assert.AreEqual(Game.SkillLevel.Beginner, game.Level);
             Assert.AreEqual(Game.GameState.Stopped, game.State);
-            Assert.IsInstanceOfType(game.Settings, typeof(Game.FieldSettings));
+            Assert.IsInstanceOfType(game.Settings, typeof(FieldSettings));
             Assert.IsNotNull(game.Settings);
             Assert.IsInstanceOfType(game.Minefield, typeof(Field));
             Assert.IsNotNull(game.Minefield);
