@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Minesweeper_RC.Model
 {
-    public class Game
+    public class Game : IGame
     {
         private int _numRevealed;
 
@@ -194,6 +194,13 @@ namespace Minesweeper_RC.Model
     /// </summary>
     public interface IGame
     {
-
+        Field Minefield { get; }
+        GameState State { get; }
+        SkillLevel Level { get; }
+        FieldSettings Settings { get; }
+        Nullable<GameResult> Result { get; }
+        void Start();
+        Cell[] Reveal(Point p);
+        Cell[] Reveal(int x, int y);
     }
 }
