@@ -61,7 +61,7 @@ namespace Minesweeper_RC_Test.View
             var field = new Field(5, 5, 5);
             var v = new FieldView();
             v.RenderField(field);
-            Assert.AreEqual<Size>(v.CellSize.MultiplyBy(5), v.Size);
+            Assert.AreEqual<Size>(v.CellSize.MultiplyBy(5, 5), v.Size);
         }
     }
 }
