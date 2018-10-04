@@ -24,9 +24,9 @@ namespace Minesweeper_RC_Test.Model
         [TestMethod]
         public void TestGetFieldsSettingsNoError()
         {
-            Assert.IsInstanceOfType(Game.GetFieldSettings(Game.SkillLevel.Beginner), typeof(FieldSettings));
-            Assert.IsInstanceOfType(Game.GetFieldSettings(Game.SkillLevel.Intermediate), typeof(FieldSettings));
-            Assert.IsInstanceOfType(Game.GetFieldSettings(Game.SkillLevel.Expert), typeof(FieldSettings));
+            Assert.IsInstanceOfType(Game.GetFieldSettings(SkillLevel.Beginner), typeof(FieldSettings));
+            Assert.IsInstanceOfType(Game.GetFieldSettings(SkillLevel.Intermediate), typeof(FieldSettings));
+            Assert.IsInstanceOfType(Game.GetFieldSettings(SkillLevel.Expert), typeof(FieldSettings));
         }
     }
 }

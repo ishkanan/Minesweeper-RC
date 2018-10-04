@@ -12,21 +12,21 @@ namespace Minesweeper_RC_Test.Model
         [TestMethod]
         public void TestInstantiateNoError()
         {
-            Assert.IsInstanceOfType(new Game(Game.SkillLevel.Beginner), typeof(Game));
+            Assert.IsInstanceOfType(new Game(SkillLevel.Beginner), typeof(Game));
         }
 
         [TestMethod]
         public void TestGetFieldSettingsNoError()
         {
-            Assert.IsInstanceOfType(Game.GetFieldSettings(Game.SkillLevel.Beginner), typeof(FieldSettings));
+            Assert.IsInstanceOfType(Game.GetFieldSettings(SkillLevel.Beginner), typeof(FieldSettings));
         }
 
         [TestMethod]
         public void TestPropertiesAfterInstantiate()
         {
-            var game = new Game(Game.SkillLevel.Beginner);
-            Assert.AreEqual(Game.SkillLevel.Beginner, game.Level);
-            Assert.AreEqual(Game.GameState.Stopped, game.State);
+            var game = new Game(SkillLevel.Beginner);
+            Assert.AreEqual(SkillLevel.Beginner, game.Level);
+            Assert.AreEqual(GameState.Stopped, game.State);
             Assert.IsInstanceOfType(game.Settings, typeof(FieldSettings));
             Assert.IsNotNull(game.Settings);
             Assert.IsInstanceOfType(game.Minefield, typeof(Field));
@@ -37,8 +37,8 @@ namespace Minesweeper_RC_Test.Model
         [TestMethod]
         public void TestFieldHasCorrectSettingsApplied()
         {
-            var game = new Game(Game.SkillLevel.Beginner);
-            var settings = Game.GetFieldSettings(Game.SkillLevel.Beginner);
+            var game = new Game(SkillLevel.Beginner);
+            var settings = Game.GetFieldSettings(SkillLevel.Beginner);
             Assert.AreEqual(new Size(settings.Width, settings.Height), game.Minefield.FieldSize);
 
             var numMines = 0;
@@ -51,30 +51,30 @@ namespace Minesweeper_RC_Test.Model
         [TestMethod]
         public void TestStartSuccessAndFail()
         {
-            var game = new Game(Game.SkillLevel.Beginner);
-            Assert.AreEqual(Game.GameState.Stopped, game.State);
+            var game = new Game(SkillLevel.Beginner);
+            Assert.AreEqual(GameState.Stopped, game.State);
             game.Start();
-            Assert.AreEqual(Game.GameState.Running, game.State);
+            Assert.AreEqual(GameState.Running, game.State);
             game.Start();
 
             // end the game and set a result
             var gamePrivate = new PrivateObject(game);
-            gamePrivate.SetProperty("Result", Game.GameResult.Failure);
-            gamePrivate.SetProperty("State", Game.GameState.Stopped);
+            gamePrivate.SetProperty("Result", GameResult.Failure);
+            gamePrivate.SetProperty("State", GameState.Stopped);
             Assert.ThrowsException<InvalidOperationException>(() => game.Start());
         }
 
         [TestMethod]
         public void TestRevealNotStarted()
         {
-            var game = new Game(Game.SkillLevel.Beginner);
+            var game = new Game(SkillLevel.Beginner);
             Assert.ThrowsException<InvalidOperationException>(() => game.Reveal(3, 3));
         }
 
         [TestMethod]
         public void TestRevealInvalidParams()
         {
-            var game = new Game(Game.SkillLevel.Beginner);
+            var game = new Game(SkillLevel.Beginner);
             game.Start();
 
             foreach (int x in new int[] { -3, -2, -1, game.Settings.Width, game.Settings.Width + 1, game.Settings.Width + 2 })
@@ -86,7 +86,7 @@ namespace Minesweeper_RC_Test.Model
         [TestMethod]
         public void TestRevealAlreadyRevealed()
         {
-            var game = new Game(Game.SkillLevel.Beginner);
+            var game = new Game(SkillLevel.Beginner);
             game.Start();
             game.Reveal(game.Minefield.SafeStartLocation);
             Assert.ThrowsException<InvalidOperationException>(() => game.Reveal(game.Minefield.SafeStartLocation));
@@ -95,7 +95,7 @@ namespace Minesweeper_RC_Test.Model
         [TestMethod]
         public void TestRevealFlaggedCell()
         {
-            var game = new Game(Game.SkillLevel.Beginner);
+            var game = new Game(SkillLevel.Beginner);
             game.Start();
             var cell = game.Minefield.Get(game.Minefield.SafeStartLocation);
             cell.IsFlagged = true;
@@ -105,7 +105,7 @@ namespace Minesweeper_RC_Test.Model
         [TestMethod]
         public void TestRevealSafeStartingLocation()
         {
-            var game = new Game(Game.SkillLevel.Beginner);
+            var game = new Game(SkillLevel.Beginner);
             game.Start();
             var revealedCells = game.Reveal(game.Minefield.SafeStartLocation);
             var adjacents = Field.GetAdjacentPoints(game.Minefield.SafeStartLocation, game.Minefield.FieldSize.Width, game.Minefield.FieldSize.Height);
@@ -117,20 +117,20 @@ namespace Minesweeper_RC_Test.Model
         [TestMethod]
         public void TestRevealMineEndsTheGameWithFailure()
         {
-            var game = new Game(Game.SkillLevel.Beginner);
+            var game = new Game(SkillLevel.Beginner);
             game.Start();
             var mineCell = game.Minefield.AsFlatArray().ToList().Find(c => c.IsMine);
             var revealedCells = game.Reveal(mineCell.Location);
             // all cells will be revealed as the mine is the first cell to be revealed
             Assert.AreEqual(game.Minefield.FieldSize.Width * game.Minefield.FieldSize.Height, revealedCells.Length);
-            Assert.AreEqual(Game.GameState.Stopped, game.State);
-            Assert.AreEqual(Game.GameResult.Failure, game.Result);
+            Assert.AreEqual(GameState.Stopped, game.State);
+            Assert.AreEqual(GameResult.Failure, game.Result);
         }
 
         [TestMethod]
         public void TestAllRevealedEndsTheGameWithSuccess()
         {
-            var game = new Game(Game.SkillLevel.Beginner);
+            var game = new Game(SkillLevel.Beginner);
             game.Start();
             // reveal each non-mine cell (obviously cheating here)
             foreach (var c in game.Minefield.AsFlatArray())
@@ -138,8 +138,8 @@ namespace Minesweeper_RC_Test.Model
                 if (!c.IsMine && !c.IsRevealed)
                     game.Reveal(c.Location);
             }
-            Assert.AreEqual(Game.GameState.Stopped, game.State);
-            Assert.AreEqual(Game.GameResult.Success, game.Result);
+            Assert.AreEqual(GameState.Stopped, game.State);
+            Assert.AreEqual(GameResult.Success, game.Result);
         }
     }
 }

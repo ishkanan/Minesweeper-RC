@@ -16,17 +16,17 @@ namespace Minesweeper_RC
 
         private void BeginnerGameMenu_Click(object sender, EventArgs e)
         {
-            _game = new Game(Game.SkillLevel.Beginner);
+            _game = new Game(SkillLevel.Beginner);
         }
 
         private void IntermediateGameMenu_Click(object sender, EventArgs e)
         {
-            _game = new Game(Game.SkillLevel.Intermediate);
+            _game = new Game(SkillLevel.Intermediate);
         }
 
         private void ExpertGameMenu_Click(object sender, EventArgs e)
         {
-            _game = new Game(Game.SkillLevel.Expert);
+            _game = new Game(SkillLevel.Expert);
         }
     }
 }

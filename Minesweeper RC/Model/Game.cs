@@ -24,26 +24,6 @@ namespace Minesweeper_RC.Model
             }
         }
 
-        public enum GameState
-        {
-            Stopped = 0,
-            Starting,
-            Running
-        }
-
-        public enum GameResult
-        {
-            Success = 0,
-            Failure
-        }
-
-        public enum SkillLevel
-        {
-            Beginner = 0,
-            Intermediate,
-            Expert
-        }
-
         public Field Minefield
         {
             get;
@@ -178,6 +158,35 @@ namespace Minesweeper_RC.Model
 
             return new Cell[] { cell };
         }
+    }
+
+    /// <summary>
+    /// Possible game states.
+    /// </summary>
+    public enum GameState
+    {
+        Stopped = 0,
+        Starting,
+        Running
+    }
+
+    /// <summary>
+    /// Possible game results.
+    /// </summary>
+    public enum GameResult
+    {
+        Success = 0,
+        Failure
+    }
+
+    /// <summary>
+    /// Available skill levels.
+    /// </summary>
+    public enum SkillLevel
+    {
+        Beginner = 0,
+        Intermediate,
+        Expert
     }
 
     /// <summary>
