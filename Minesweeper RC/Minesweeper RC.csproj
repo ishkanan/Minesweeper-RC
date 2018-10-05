@@ -108,5 +108,13 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Flag.png" />
+    <Content Include="Resources\SunCool.png" />
+    <Content Include="Resources\SunDead.png" />
+    <Content Include="Resources\SunHappy.png" />
+    <Content Include="Resources\SunShocked.png" />
+    <Content Include="Resources\TrippedMine.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
