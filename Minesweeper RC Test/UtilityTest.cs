@@ -2,61 +2,79 @@
 using Minesweeper_RC.Utility;
 using Moq;
 using System;
-using System.Drawing.Text;
-using System.IO;
-using System.Reflection;
-using System.Runtime.InteropServices;
+using System.Globalization;
+using System.Resources;
+using System.Linq;
 
 namespace Minesweeper_RC_Test
 {
     [TestClass]
     public class UtilityTest
     {
-        [TestMethod]
-        public void TestGetFontResourceBytesValidResource()
-        {
-            var mockAssembly = new Mock<_Assembly>(Moq.MockBehavior.Loose);
-            var fontName = "TestFontyMcFont";
-            var testFontBytes = new byte[] { 1, 2, 3, 4, 5 };
-            var testStream = new MemoryStream(testFontBytes);
+        private MockRepository _strictRepo;
+        private ResourceManager _resManagerMock;
+        private string _validResName = "TestResource";
+        private string _invalidResName = "MissingResource";
+        private byte[] _resBytes = new byte[] { 1, 2, 3, 4, 5 };
 
-            mockAssembly.Setup(a => a.GetManifestResourceStream(fontName)).Returns(testStream);
-            var actualBytes = Utility.GetFontResourceBytes(mockAssembly.Object, fontName);
-            CollectionAssert.AreEqual(testFontBytes, actualBytes);
+        [TestInitialize]
+        public void Setup()
+        {
+            _strictRepo = new MockRepository(MockBehavior.Strict);
+
+            // setup various mocks
+            var resSetMock = _strictRepo.Of<ResourceSet>()
+                .Where(r => r.GetObject(_validResName) == _resBytes)
+                .Where(r => r.GetObject(_invalidResName) == null)
+                .First();
+            _resManagerMock = _strictRepo.Of<ResourceManager>()
+                .Where(m => m.GetResourceSet(CultureInfo.CurrentUICulture, true, true) == resSetMock)
+                .First();
         }
 
         [TestMethod]
-        public void TestGetFontResourceBytesInvalidResource()
+        public void TestGetResourceBytesInvalidParams()
         {
-            var mockAssembly = new Mock<_Assembly>(Moq.MockBehavior.Loose);
-            var fontName = "TestFontyMcFont";
-
-            mockAssembly.Setup(a => a.GetManifestResourceStream(fontName));
-            Assert.ThrowsException<ApplicationException>(() => Utility.GetFontResourceBytes(mockAssembly.Object, fontName));
+            Assert.ThrowsException<ArgumentNullException>(() => Utility.GetResourceBytes(null, _validResName));
+            Assert.ThrowsException<ArgumentNullException>(() => Utility.GetResourceBytes(_resManagerMock, null));
+            Assert.ThrowsException<ArgumentException>(() => Utility.GetResourceBytes(_resManagerMock, ""));
         }
 
         [TestMethod]
-        public void TestAddFontFromResourceValidResource()
+        public void TestGetResourceBytesInvalidResource()
         {
-            var mockAssembly = new Mock<_Assembly>(Moq.MockBehavior.Loose);
-            var fontName = "TestFontyMcFont";
-            var testFontBytes = new byte[] { 1, 2, 3, 4, 5 };
-            var testStream = new MemoryStream(testFontBytes);
+            Assert.ThrowsException<ArgumentException>(() => Utility.GetResourceBytes(_resManagerMock, _invalidResName));
+        }
 
-            mockAssembly.Setup(a => a.GetManifestResourceStream(fontName)).Returns(testStream);
-            var actualData = Utility.GetFontResourcePointer(mockAssembly.Object, fontName);
+        [TestMethod]
+        public void TestGetResourceBytesValidResource()
+        {
+            var actualBytes = Utility.GetResourceBytes(_resManagerMock, _validResName);
+
+            CollectionAssert.AreEqual(_resBytes, actualBytes);
+        }
+
+        [TestMethod]
+        public void TestGetResourceBytesPointerInvalidParams()
+        {
+            Assert.ThrowsException<ArgumentNullException>(() => Utility.GetResourceBytesPointer(null, _validResName));
+            Assert.ThrowsException<ArgumentNullException>(() => Utility.GetResourceBytesPointer(_resManagerMock, null));
+            Assert.ThrowsException<ArgumentException>(() => Utility.GetResourceBytesPointer(_resManagerMock, ""));
+        }
+
+        [TestMethod]
+        public void TestGetResourceBytesPointerInvalidResource()
+        {
+            Assert.ThrowsException<ArgumentException>(() => Utility.GetResourceBytesPointer(_resManagerMock, _invalidResName));
+        }
+
+        [TestMethod]
+        public void TestGetResourceBytesPointerValidResource()
+        {
+            var actualData = Utility.GetResourceBytesPointer(_resManagerMock, _validResName);
+
             Assert.AreNotEqual<int>(0, actualData.Item1.ToInt32());
-            Assert.AreEqual<int>(testFontBytes.Length, actualData.Item2);
-        }
-
-        [TestMethod]
-        public void TestAddFontFromResourceInvalidResource()
-        {
-            var mockAssembly = new Mock<_Assembly>(Moq.MockBehavior.Loose);
-            var fontName = "TestFontyMcFont";
-
-            mockAssembly.Setup(a => a.GetManifestResourceStream(fontName));
-            Assert.ThrowsException<ApplicationException>(() => Utility.GetFontResourcePointer(mockAssembly.Object, fontName));
+            Assert.AreEqual<int>(_resBytes.Length, actualData.Item2);
         }
     }
 }
