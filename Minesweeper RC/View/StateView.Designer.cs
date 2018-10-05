@@ -28,47 +28,79 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.SunImage = new System.Windows.Forms.PictureBox();
-            this.MinesLeftLabel = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.SunImage)).BeginInit();
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StateView));
+            this.MinesToFlagLabel = new System.Windows.Forms.Label();
+            this.SunImageList = new System.Windows.Forms.ImageList(this.components);
+            this.ElapsedTimeLabel = new System.Windows.Forms.Label();
+            this.SunButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // SunImage
+            // MinesToFlagLabel
             // 
-            this.SunImage.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.SunImage.Location = new System.Drawing.Point(129, 3);
-            this.SunImage.Name = "SunImage";
-            this.SunImage.Size = new System.Drawing.Size(30, 30);
-            this.SunImage.TabIndex = 0;
-            this.SunImage.TabStop = false;
+            this.MinesToFlagLabel.BackColor = System.Drawing.Color.Black;
+            this.MinesToFlagLabel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.MinesToFlagLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.MinesToFlagLabel.ForeColor = System.Drawing.Color.Red;
+            this.MinesToFlagLabel.Location = new System.Drawing.Point(22, 2);
+            this.MinesToFlagLabel.Name = "MinesToFlagLabel";
+            this.MinesToFlagLabel.Size = new System.Drawing.Size(82, 42);
+            this.MinesToFlagLabel.TabIndex = 1;
+            this.MinesToFlagLabel.Text = "000";
+            this.MinesToFlagLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // MinesLeftLabel
+            // SunImageList
             // 
-            this.MinesLeftLabel.Location = new System.Drawing.Point(3, 3);
-            this.MinesLeftLabel.Name = "MinesLeftLabel";
-            this.MinesLeftLabel.Size = new System.Drawing.Size(120, 30);
-            this.MinesLeftLabel.TabIndex = 1;
-            this.MinesLeftLabel.Text = "000";
+            this.SunImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("SunImageList.ImageStream")));
+            this.SunImageList.TransparentColor = System.Drawing.Color.Transparent;
+            this.SunImageList.Images.SetKeyName(0, "Happy");
+            this.SunImageList.Images.SetKeyName(1, "Shocked");
+            this.SunImageList.Images.SetKeyName(2, "Cool");
+            this.SunImageList.Images.SetKeyName(3, "Dead");
+            // 
+            // ElapsedTimeLabel
+            // 
+            this.ElapsedTimeLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ElapsedTimeLabel.BackColor = System.Drawing.Color.Black;
+            this.ElapsedTimeLabel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.ElapsedTimeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ElapsedTimeLabel.ForeColor = System.Drawing.Color.Red;
+            this.ElapsedTimeLabel.Location = new System.Drawing.Point(189, 2);
+            this.ElapsedTimeLabel.Name = "ElapsedTimeLabel";
+            this.ElapsedTimeLabel.Size = new System.Drawing.Size(82, 42);
+            this.ElapsedTimeLabel.TabIndex = 1;
+            this.ElapsedTimeLabel.Text = "000";
+            this.ElapsedTimeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // SunButton
+            // 
+            this.SunButton.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.SunButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.SunButton.Location = new System.Drawing.Point(124, 3);
+            this.SunButton.Name = "SunButton";
+            this.SunButton.Size = new System.Drawing.Size(41, 41);
+            this.SunButton.TabIndex = 2;
+            this.SunButton.UseVisualStyleBackColor = true;
+            this.SunButton.Click += new System.EventHandler(this.SunButton_Click);
             // 
             // StateView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.MinesLeftLabel);
-            this.Controls.Add(this.SunImage);
+            this.Controls.Add(this.SunButton);
+            this.Controls.Add(this.ElapsedTimeLabel);
+            this.Controls.Add(this.MinesToFlagLabel);
             this.Name = "StateView";
-            this.Size = new System.Drawing.Size(289, 36);
+            this.Size = new System.Drawing.Size(289, 46);
             this.Load += new System.EventHandler(this.StateView_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.SunImage)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        private System.Windows.Forms.PictureBox SunImage;
-        private System.Windows.Forms.Label MinesLeftLabel;
+        private System.Windows.Forms.Label MinesToFlagLabel;
+        private System.Windows.Forms.Label ElapsedTimeLabel;
+        public System.Windows.Forms.Button SunButton;
+        public System.Windows.Forms.ImageList SunImageList;
     }
 }

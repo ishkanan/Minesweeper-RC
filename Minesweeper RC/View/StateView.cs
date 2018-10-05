@@ -7,8 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Minesweeper_RC.Utility;
 using System.Drawing.Text;
+using System.Resources;
+using Minesweeper_RC.Utility;
 
 namespace Minesweeper_RC.View
 {
@@ -22,30 +23,38 @@ namespace Minesweeper_RC.View
 
             // load the custom 7-segment font
             _fonts = new PrivateFontCollection();
-            //_fonts.AddMemoryFont(Utility.Utility.GetFontResourcePointer)
+            var resManager = new ResourceManager(typeof(Minesweeper_RC.Properties.Resources));
+            var font = Utility.Utility.GetResourceBytesPointer(resManager, "SevenSegmentFont");
+            _fonts.AddMemoryFont(font.Item1, font.Item2);
         }
 
         public SunState Sun
         {
-            get => throw new NotImplementedException();
-            set => throw new NotImplementedException();
+            set => SunButton.Image = SunImageList.Images[value.ToString()];
         }
 
         public int MinesToFlag
         {
-            get => throw new NotImplementedException();
-            set => throw new NotImplementedException();
+            set => MinesToFlagLabel.Text = value.ToString();
         }
 
         public int ElapsedMilliseconds
         {
-            get => throw new NotImplementedException();
-            set => throw new NotImplementedException();
+            set => ElapsedTimeLabel.Text = (value / 1000).ToString();
         }
+
+        public event EventHandler SunClicked;
 
         private void StateView_Load(object sender, EventArgs e)
         {
+            // assign the custom 7-segment font
+            MinesToFlagLabel.Font = new Font(_fonts.Families[0], 25);
+            ElapsedTimeLabel.Font = MinesToFlagLabel.Font;
+        }
 
+        private void SunButton_Click(object sender, EventArgs e)
+        {
+            SunClicked?.Invoke(this, e);
         }
     }
 
@@ -62,14 +71,18 @@ namespace Minesweeper_RC.View
         /// <summary>
         /// The state of that Sun guy.
         /// </summary>
-        SunState Sun { get; set; }
+        SunState Sun { set; }
         /// <summary>
         /// Number of mines left to flag.
         /// </summary>
-        int MinesToFlag { get; set; }
+        int MinesToFlag { set; }
         /// <summary>
         /// Total elapsed milliseconds. Resolution is implementation-specific.
         /// </summary>
-        int ElapsedMilliseconds { get; set; }
+        int ElapsedMilliseconds { set; }
+        /// <summary>
+        /// Event raised when Sun is clicked.
+        /// </summary>
+        event EventHandler SunClicked;
     }
 }

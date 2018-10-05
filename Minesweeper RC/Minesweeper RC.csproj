@@ -92,8 +92,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="View\StateView.resx">
       <DependentUpon>StateView.cs</DependentUpon>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>StateView1.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
