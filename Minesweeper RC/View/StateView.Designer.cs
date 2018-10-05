@@ -60,6 +60,7 @@
             this.Controls.Add(this.SunImage);
             this.Name = "StateView";
             this.Size = new System.Drawing.Size(289, 36);
+            this.Load += new System.EventHandler(this.StateView_Load);
             ((System.ComponentModel.ISupportInitialize)(this.SunImage)).EndInit();
             this.ResumeLayout(false);
 

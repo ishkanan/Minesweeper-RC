@@ -70,6 +70,7 @@
     <Compile Include="Model\FieldSettingsTest.cs" />
     <Compile Include="Model\FieldTest.cs" />
     <Compile Include="ExtensionsTest.cs" />
+    <Compile Include="View\StateViewTest.cs" />
     <Compile Include="UtilityTest.cs" />
     <Compile Include="View\FieldViewTest.cs" />
   </ItemGroup>
