@@ -45,7 +45,18 @@ namespace Minesweeper_RC_Test
 
             mockAssembly.Setup(a => a.GetManifestResourceStream(fontName)).Returns(testStream);
             var actualData = Utility.GetFontResourcePointer(mockAssembly.Object, fontName);
-            Assert.AreNotEqual<int>(0, actualData.ToInt32());
+            Assert.AreNotEqual<int>(0, actualData.Item1.ToInt32());
+            Assert.AreEqual<int>(testFontBytes.Length, actualData.Item2);
+        }
+
+        [TestMethod]
+        public void TestAddFontFromResourceInvalidResource()
+        {
+            var mockAssembly = new Mock<_Assembly>(Moq.MockBehavior.Loose);
+            var fontName = "TestFontyMcFont";
+
+            mockAssembly.Setup(a => a.GetManifestResourceStream(fontName));
+            Assert.ThrowsException<ApplicationException>(() => Utility.GetFontResourcePointer(mockAssembly.Object, fontName));
         }
     }
 }

@@ -16,12 +16,13 @@ namespace Minesweeper_RC.Utility
         /// </summary>
         /// <param name="assembly">The assembly.</param>
         /// <param name="fontResourceName">The name of the font resource.</param>
-        public static IntPtr GetFontResourcePointer(_Assembly assembly, string fontResourceName)
+        /// <returns>The pointer and the number of bytes it points to.</returns>
+        public static Tuple<IntPtr, int> GetFontResourcePointer(_Assembly assembly, string fontResourceName)
         {
             var fontBytes = GetFontResourceBytes(assembly, fontResourceName);
             var fontData = Marshal.AllocCoTaskMem(fontBytes.Length);
             Marshal.Copy(fontBytes, 0, fontData, fontBytes.Length);
-            return fontData;
+            return new Tuple<IntPtr, int>(fontData, fontBytes.Length);
         }
 
         /// <summary>
