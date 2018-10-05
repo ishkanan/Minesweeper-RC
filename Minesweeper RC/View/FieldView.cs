@@ -26,7 +26,7 @@ namespace Minesweeper_RC.View
         public FieldView()
         {
             InitializeComponent();
-            CellSize = new Size(10, 10);
+            CellSize = new Size(30, 30);
         }
 
         public event CellClickEventHandler CellClick;
@@ -43,7 +43,14 @@ namespace Minesweeper_RC.View
                     {
                         Size = _cellSize,
                         Location = new Point(x * _cellSize.Width, y * _cellSize.Height),
+                        FlatStyle = cell.IsRevealed ? FlatStyle.Flat : FlatStyle.System,
+                        // print neighbours if cell is revealed, non-mine and is not blank
+                        Text = cell.IsRevealed && !cell.IsMine && cell.Neighbours > 0 ? cell.Neighbours.ToString() : "",
                     };
+                    if (cell.IsRevealed && cell.IsMine)
+                        btn.Image = CellImageList.Images["TrippedMine"];
+                    if (!cell.IsRevealed && cell.IsFlagged)
+                        btn.Image = CellImageList.Images["Flag"];
                     btn.MouseUp += (sender, e) => Cell_MouseUp(sender, e, cell);
                     Controls.Add(btn);
                 }

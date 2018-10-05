@@ -21,7 +21,7 @@ namespace Minesweeper_RC_Test.View
         public void TestSetDefaultCellSize()
         {
             IFieldView v = new FieldView();
-            Assert.AreEqual<Size>(new Size(10, 10), v.CellSize);
+            Assert.AreEqual<Size>(new Size(30, 30), v.CellSize);
         }
 
         [TestMethod]
