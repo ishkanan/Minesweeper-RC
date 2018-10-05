@@ -63,9 +63,9 @@ namespace Minesweeper_RC.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        public static byte[] _7segment {
+        public static byte[] SevenSegmentFont {
             get {
-                object obj = ResourceManager.GetObject("_7segment", resourceCulture);
+                object obj = ResourceManager.GetObject("SevenSegmentFont", resourceCulture);
                 return ((byte[])(obj));
             }
         }
