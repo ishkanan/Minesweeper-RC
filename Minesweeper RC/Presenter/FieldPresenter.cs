@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Easy.MessageHub;
+﻿using Easy.MessageHub;
 using Minesweeper_RC.Event;
 using Minesweeper_RC.Model;
 using Minesweeper_RC.View;
+using System;
+using System.Windows.Forms;
 
 namespace Minesweeper_RC.Presenter
 {
