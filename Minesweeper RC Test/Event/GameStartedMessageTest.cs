@@ -13,7 +13,7 @@ namespace Minesweeper_RC_Test.Event
         {
             var game = new Game(SkillLevel.Beginner);
             var m = new GameStartedMessage(game);
-            Assert.AreEqual<Game>(game, m.Game);
+            Assert.AreEqual<IGame>(game, m.Game);
         }
 
         [TestMethod]

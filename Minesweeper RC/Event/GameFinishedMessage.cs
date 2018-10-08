@@ -5,9 +5,9 @@ namespace Minesweeper_RC.Event
 {
     public class GameFinishedMessage : IMessage
     {
-        public Game Game { get; private set; }
+        public IGame Game { get; private set; }
 
-        public GameFinishedMessage(Game game)
+        public GameFinishedMessage(IGame game)
         {
             this.Game = game ?? throw new ArgumentNullException("game");
         }

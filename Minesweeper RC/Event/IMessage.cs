@@ -7,6 +7,6 @@ namespace Minesweeper_RC.Event
     /// </summary>
     public interface IMessage
     {
-        Game Game { get; }
+        IGame Game { get; }
     }
 }

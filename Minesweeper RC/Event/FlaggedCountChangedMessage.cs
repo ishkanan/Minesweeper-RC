@@ -5,9 +5,9 @@ namespace Minesweeper_RC.Event
 {
     public class FlaggedCountChangedMessage : IMessage
     {
-        public Game Game { get; private set; }
+        public IGame Game { get; private set; }
 
-        public FlaggedCountChangedMessage(Game game)
+        public FlaggedCountChangedMessage(IGame game)
         {
             this.Game = game ?? throw new ArgumentNullException("game");
         }
