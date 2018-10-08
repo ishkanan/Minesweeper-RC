@@ -28,7 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FieldView));
+            this.CellImageList = new System.Windows.Forms.ImageList(this.components);
             this.SuspendLayout();
+            // 
+            // CellImageList
+            // 
+            this.CellImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("CellImageList.ImageStream")));
+            this.CellImageList.TransparentColor = System.Drawing.Color.Transparent;
+            this.CellImageList.Images.SetKeyName(0, "Flag");
+            this.CellImageList.Images.SetKeyName(1, "TrippedMine");
             // 
             // FieldView
             // 
@@ -41,5 +51,7 @@
         }
 
         #endregion
+
+        private System.Windows.Forms.ImageList CellImageList;
     }
 }
