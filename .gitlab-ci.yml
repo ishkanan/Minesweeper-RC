@@ -13,8 +13,8 @@ before_script:
   - SET "DATE_TIME_STAMP=%YYYY%%MM%%DD%_%HH%%Min%%Sec%"
 
 variables:
-  EXE_RELEASE_FOLDER: 'Minesweeper RC\bin\Release'
-  TEST_RELEASE_FOLDER: 'Minesweeper RC Test\bin\Release'
+  EXE_RELEASE_FOLDER: '.\Minesweeper RC\bin\Release'
+  TEST_RELEASE_FOLDER: '.\Minesweeper RC Test\bin\Release'
   DEPLOY_ROOT_FOLDER: 'C:\Users\antho\Desktop\Minesweeper RC Releases'
   
   NUGET_PATH: 'C:\Program Files (x86)\NuGet'
@@ -36,10 +36,9 @@ build:
     - '"%NUGET_PATH%\nuget.exe" restore'
     - '"%MSBUILD_PATH%\msbuild.exe" /detailedsummary /consoleloggerparameters:Summary /maxcpucount /nologo /p:Configuration=Release /verbosity:normal'
   artifacts:
+    name: "%DATE_TIME_STAMP%-%CI_COMMIT_TAG%"
     expire_in: 1 week
-    paths:
-      - '"%EXE_RELEASE_FOLDER%\Minesweeper RC.exe"'
-      - '"%TEST_RELEASE_FOLDER%\"'
+    untracked: true
 
 test:
   stage: test
