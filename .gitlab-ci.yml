@@ -21,7 +21,7 @@ stages:
   - test
   - deploy
 
-build_job:
+build:
   stage: build
   only:
     - tags
@@ -35,7 +35,7 @@ build_job:
       - '"$env:EXE_RELEASE_FOLDER\Minesweeper RC.exe"'
       - '"$env:TEST_RELEASE_FOLDER\"'
 
-test_job:
+test:
   stage: test
   only:
     - tags
@@ -44,16 +44,15 @@ test_job:
   dependencies:
     - build_job
 
-deploy_job:
+deploy:
   stage: deploy
   only:
     - tags
+  environment:
+    - name: staging
   script:
     - 'SET deployFolder=$env:DEPLOY_FOLDER\$env:CI_BUILD_TAG'
-
-    # xcopy takes care of recursively creating required folders
     - 'xcopy /y "$env:EXE_RELEASE_FOLDER\Minesweeper RC.exe" "$deployFolder\"'
-
   dependencies:
     - build_job
     - test_job
