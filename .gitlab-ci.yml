@@ -1,0 +1,59 @@
+# Minesweeper-RC GitLab CI script
+# -------------------------------
+# The script is composed of 3 stages: build, test and deploy.  
+#
+# The build stage restores NuGet packages and runs msbuild to build the EXE.
+# The test stage runs mstest to run the tests inside the test project.
+# The deploy stage copies the EXE to a specified location.
+
+
+variables:
+  EXE_RELEASE_FOLDER: 'Minesweeper RC\bin\Release'
+  TEST_RELEASE_FOLDER: 'Minesweeper RC Test\bin\Release'
+  DEPLOY_FOLDER: 'C:\Users\antho\Desktop\Minesweeper RC Releases'
+  
+  NUGET_PATH: 'C:\Program Files (x86)\NuGet'
+  MSBUILD_PATH: 'C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin'
+  MSTEST_PATH: 'C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE'
+
+stages:
+  - build
+  - test
+  - deploy
+
+build_job:
+  stage: build
+  only:
+    - tags
+  script:
+    - echo "Fetching packages with NuGet..."
+    - '"$env:NUGET_PATH\nuget.exe" restore'
+    - '"$env:MSBUILD_PATH\msbuild.exe" /consoleloggerparameters:ErrorsOnly /maxcpucount /nologo /p:Configuration=Release /verbosity:quiet'
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - '"$env:EXE_RELEASE_FOLDER\Minesweeper RC.exe"'
+      - '"$env:TEST_RELEASE_FOLDER\"'
+
+test_job:
+  stage: test
+  only:
+    - tags
+  script:
+    - '"$env:MSTEST_PATH\mstest.exe" /testcontainer:"$env:TEST_RELEASE_FOLDER\Minesweeper RC Test.dll"'
+  dependencies:
+    - build_job
+
+deploy_job:
+  stage: deploy
+  only:
+    - tags
+  script:
+    - 'SET deployFolder=$env:DEPLOY_FOLDER\$env:CI_BUILD_TAG'
+
+    # xcopy takes care of recursively creating required folders
+    - 'xcopy /y "$env:EXE_RELEASE_FOLDER\Minesweeper RC.exe" "$deployFolder\"'
+
+  dependencies:
+    - build_job
+    - test_job
