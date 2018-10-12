@@ -75,13 +75,14 @@ namespace Minesweeper_RC.Model
         }
 
         /// <summary>
-        /// See documentation for Reveal(x, y).
+        /// See documentation for Reveal(int, int, bool).
         /// </summary>
-        /// <param name="p"></param>
-        /// <returns></returns>
-        public Cell[] Reveal(Point p)
+        /// <param name="p">Point holding X and Y co-ordinates of the cell.</param>
+        /// <param name="confident">See documentation for Reveal(int, int, bool).</param>
+        /// <returns>See documentation for Reveal(int, int, bool).</returns>
+        public Cell[] Reveal(Point p, bool confident=false)
         {
-            return Reveal(p.X, p.Y);
+            return Reveal(p.X, p.Y, confident);
         }
 
         /// <summary>
@@ -89,11 +90,15 @@ namespace Minesweeper_RC.Model
         /// If the cell is a blank (no adjacent mines), all adjacent unrevealed non-mine cells are also revealed.
         /// If only mines are left, regardless of flag status, the game ends with a success result.
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
+        /// <param name="x">X co-ordinate of cell.</param>
+        /// <param name="y">Y co-ordinate of cell.</param>
+        /// <param name="confident">If true, will reveal all non-flagged non-revealed neighbour cells if the number
+        /// of flagged cells equals at least the number of mines in the neighbourhood, regardless if the flags are
+        /// set on the correct cells. Traditionally this occurred when both left and right mouse buttons were pressed.
+        /// </param>
         /// <returns>An array of cells that were revealed. First element is always the specified cell, the rest
         /// in the order they were revealed in.</returns>
-        public Cell[] Reveal(int x, int y)
+        public Cell[] Reveal(int x, int y, bool confident=false)
         {
             if (State != GameState.Running)
                 throw new InvalidOperationException("Game is not running");
@@ -110,41 +115,29 @@ namespace Minesweeper_RC.Model
                 throw new InvalidOperationException("Cell is flagged as a mine");
             cell.IsRevealed = true;
             _numRevealed++;
+            var revealedCells = new List<Cell>(Minefield.CellCount) { cell };
 
-            // is the game over?
+            // is the game over? if so, reveal all unrevealed cells
             if (cell.IsMine || Minefield.CellCount - Settings.MineCount == _numRevealed)
             {
                 State = GameState.Stopped;
                 Result = cell.IsMine ? GameResult.Failure : GameResult.Success;
-                // reveal all unrevealed cells
-                var revealedCells = new List<Cell> { cell };
-                for (var fy = 0; fy < Settings.Height; fy++)
-                {
-                    for (var fx = 0; fx < Settings.Width; fx++)
-                    {
-                        cell = Minefield.Get(fx, fy);
-                        if (!cell.IsRevealed)
-                        {
-                            cell.IsRevealed = true;
-                            revealedCells.Add(cell);
-                        }
-                    }
-                }
+                revealedCells.AddRange(RevealAllNonFlaggedCells());
                 return revealedCells.ToArray();
             }
 
             // reveal any unrevealed non-mine neighbours if cell is blank
+            var neighbours = Field.GetAdjacentPoints(cell.Location, Settings.Width, Settings.Height);
             if (cell.Neighbours == 0)
             {
-                var revealedCells = new List<Cell> { cell };
-                Field.GetAdjacentPoints(cell.Location, Settings.Width, Settings.Height).ToList().ForEach(p =>
+                neighbours.ToList().ForEach(p =>
                 {
                     var adjacent = Minefield.Get(p.X, p.Y);
-                    if (!adjacent.IsMine && !adjacent.IsRevealed)
+                    if (!adjacent.IsFlagged && !adjacent.IsMine && !adjacent.IsRevealed)
                     {
                         // recursively reveal if the adjacent is also a blank, otherwise just reveal it
                         if (adjacent.Neighbours == 0)
-                            revealedCells.AddRange(Reveal(adjacent.Location));
+                            revealedCells.AddRange(Reveal(adjacent.Location, confident));
                         else
                         {
                             adjacent.IsRevealed = true;
@@ -153,10 +146,48 @@ namespace Minesweeper_RC.Model
                         }
                     }
                 });
-                return revealedCells.ToArray();
             }
 
-            return new Cell[] { cell };
+            // confident reveal?
+            if (confident)
+            {
+                // get neighbours and count mines and flags
+                var flagCount = neighbours.Where(p => Minefield.Get(p).IsFlagged).Count();
+                var mineCount = neighbours.Where(p => Minefield.Get(p).IsMine).Count();
+                if (flagCount >= mineCount)
+                {
+                    neighbours.ToList().ForEach(p =>
+                    {
+                        var adjacent = Minefield.Get(p.X, p.Y);
+                        if (!adjacent.IsFlagged && !adjacent.IsRevealed)
+                            revealedCells.AddRange(Reveal(adjacent.Location, confident));
+                    });
+                }
+            }
+
+            return revealedCells.ToArray();
+        }
+
+        /// <summary>
+        /// Reveals all unrevealed, non-flagged cells and returns the cells that were revealed.
+        /// </summary>
+        /// <returns></returns>
+        private List<Cell> RevealAllNonFlaggedCells()
+        {
+            var revealedCells = new List<Cell>(Minefield.CellCount);
+            for (var fy = 0; fy < Settings.Height; fy++)
+            {
+                for (var fx = 0; fx < Settings.Width; fx++)
+                {
+                    var cell = Minefield.Get(fx, fy);
+                    if (!cell.IsFlagged && !cell.IsRevealed)
+                    {
+                        cell.IsRevealed = true;
+                        revealedCells.Add(cell);
+                    }
+                }
+            }
+            return revealedCells;
         }
     }
 
@@ -200,7 +231,7 @@ namespace Minesweeper_RC.Model
         FieldSettings Settings { get; }
         Nullable<GameResult> Result { get; }
         void Start();
-        Cell[] Reveal(Point p);
-        Cell[] Reveal(int x, int y);
+        Cell[] Reveal(Point p, bool confident);
+        Cell[] Reveal(int x, int y, bool confident);
     }
 }

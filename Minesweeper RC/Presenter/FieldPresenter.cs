@@ -46,7 +46,7 @@ namespace Minesweeper_RC.Presenter
                 // reveal a cell
                 try
                 {
-                    _game.Reveal(cell.Location);
+                    _game.Reveal(cell.Location, false);
                 }
                 catch (InvalidOperationException)
                 {
@@ -62,8 +62,16 @@ namespace Minesweeper_RC.Presenter
             }
             else if (isLeft && isRight)
             {
-                // TODO: implement game.AggressiveReveal
-                throw new NotImplementedException();
+                // confident reveal
+                try
+                {
+                    _game.Reveal(cell.Location, true);
+                }
+                catch (InvalidOperationException)
+                {
+                    // ignore these errors as no impact to user
+                    return;
+                }
             }
 
             // no more input is accepted if game is no longer running
