@@ -34,7 +34,7 @@ build:
   script:
     - echo "Fetching packages with NuGet..."
     - '"%NUGET_PATH%\nuget.exe" restore'
-    - '"%MSBUILD_PATH%\msbuild.exe" /consoleloggerparameters:ErrorsOnly /maxcpucount /nologo /p:Configuration=Release /verbosity:quiet'
+    - '"%MSBUILD_PATH%\msbuild.exe" /detailedsummary /consoleloggerparameters:Summary /maxcpucount /nologo /p:Configuration=Release' /verbosity:normal
   artifacts:
     expire_in: 1 week
     paths:
