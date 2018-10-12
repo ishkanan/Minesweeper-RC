@@ -49,7 +49,7 @@ deploy:
   only:
     - tags
   environment:
-    - name: staging
+    name: staging
   script:
     - 'SET deployFolder=$env:DEPLOY_FOLDER\$env:CI_BUILD_TAG'
     - 'xcopy /y "$env:EXE_RELEASE_FOLDER\Minesweeper RC.exe" "$deployFolder\"'
