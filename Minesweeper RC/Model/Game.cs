@@ -132,19 +132,10 @@ namespace Minesweeper_RC.Model
             {
                 neighbours.ToList().ForEach(p =>
                 {
+                    // recursively reveal adjacent cell
                     var adjacent = Minefield.Get(p.X, p.Y);
                     if (!adjacent.IsFlagged && !adjacent.IsMine && !adjacent.IsRevealed)
-                    {
-                        // recursively reveal if the adjacent is also a blank, otherwise just reveal it
-                        if (adjacent.Neighbours == 0)
-                            revealedCells.AddRange(Reveal(adjacent.Location, confident));
-                        else
-                        {
-                            adjacent.IsRevealed = true;
-                            _numRevealed++;
-                            revealedCells.Add(adjacent);
-                        }
-                    }
+                        revealedCells.AddRange(Reveal(adjacent.Location, confident));
                 });
             }
 
@@ -158,6 +149,7 @@ namespace Minesweeper_RC.Model
                 {
                     neighbours.ToList().ForEach(p =>
                     {
+                        // recursively reveal even if it is a mine
                         var adjacent = Minefield.Get(p.X, p.Y);
                         if (!adjacent.IsFlagged && !adjacent.IsRevealed)
                             revealedCells.AddRange(Reveal(adjacent.Location, confident));
