@@ -30,6 +30,7 @@ namespace Minesweeper_RC.View
         }
 
         public event CellClickEventHandler CellClick;
+        public event MouseEventHandler FieldMouseDown;
 
         public void RenderField(IField field)
         {
@@ -49,8 +50,9 @@ namespace Minesweeper_RC.View
                     };
                     if (cell.IsRevealed && cell.IsMine)
                         btn.Image = CellImageList.Images["TrippedMine"];
-                    if (!cell.IsRevealed && cell.IsFlagged)
+                    if (cell.IsFlagged)
                         btn.Image = CellImageList.Images["Flag"];
+                    btn.MouseDown += (sender, e) => Cell_MouseDown(sender, e);
                     btn.MouseUp += (sender, e) => Cell_MouseUp(sender, e, cell);
                     Controls.Add(btn);
                 }
@@ -67,6 +69,11 @@ namespace Minesweeper_RC.View
             }
         }
 
+        private void Cell_MouseDown(object sender, MouseEventArgs e)
+        {
+            FieldMouseDown?.Invoke(this, e);
+        }
+
         private void Cell_MouseUp(object sender, MouseEventArgs e, Cell cell)
         {
             CellClick?.Invoke(cell, e.Button);
@@ -80,6 +87,10 @@ namespace Minesweeper_RC.View
         /// </summary>
         /// <param name="size"></param>
         Size CellSize { get; set; }
+        /// <summary>
+        /// Raised when a mouse button is down.
+        /// </summary>
+        event MouseEventHandler FieldMouseDown;
         /// <summary>
         /// Raised when a cell is clicked.
         /// </summary>
