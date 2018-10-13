@@ -11,11 +11,14 @@ namespace Minesweeper_RC.Presenter
     {
         private IStateView _stateView;
         private IMessageHub _aggregator;
+        private IGame _game;
 
-        public StatePresenter(IStateView stateView, IMessageHub aggregator)
+        public StatePresenter(IStateView stateView, IMessageHub aggregator, IGame game)
         {
             _stateView = stateView;
             _stateView.SunClicked += OnSunClicked;
+
+            _game = game;
 
             _aggregator = aggregator;
             _aggregator.Subscribe<GameFinishedMessage>(m => OnGameFinished(m.Game));
@@ -35,7 +38,7 @@ namespace Minesweeper_RC.Presenter
 
         private void OnSunClicked(object sender, EventArgs e)
         {
-            //TODO: add NewGameRequestedMessage
+            _aggregator.Publish<NewGameRequestedMessage>(new NewGameRequestedMessage(_game));
         }
     }
 }
