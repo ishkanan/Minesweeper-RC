@@ -3,6 +3,7 @@ using Minesweeper_RC.Event;
 using Minesweeper_RC.Model;
 using Minesweeper_RC.View;
 using System;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Minesweeper_RC.Presenter
@@ -19,6 +20,7 @@ namespace Minesweeper_RC.Presenter
 
             _fieldView = fieldView;
             _fieldView.CellClick += OnCellClick;
+            _fieldView.FieldMouseDown += OnFieldMouseDown;
             _fieldView.RenderField(_game.Minefield);
 
             _aggregator = aggregator;
@@ -28,6 +30,11 @@ namespace Minesweeper_RC.Presenter
         private void OnGameStarted(IGame game)
         {
             _fieldView.RenderField(game.Minefield);
+        }
+
+        private void OnFieldMouseDown(object sender, MouseEventArgs e)
+        {
+            _aggregator.Publish<FieldMouseDownMessage>(new FieldMouseDownMessage(_game));
         }
 
         private void OnCellClick(Cell cell, MouseButtons buttons)
@@ -41,37 +48,16 @@ namespace Minesweeper_RC.Presenter
                 cell.IsFlagged = !cell.IsFlagged;
                 _aggregator.Publish<FlaggedCountChangedMessage>(new FlaggedCountChangedMessage(_game));
             }
-            else if (isLeft && !isRight)
+            else if (isLeft)
             {
-                // reveal a cell
-                try
-                {
-                    _game.Reveal(cell.Location, false);
-                }
-                catch (InvalidOperationException)
-                {
-                    // ignore these errors as no impact to user
-                    return;
-                }
+                // normal or confident reveal
+                var revealed = _game.Reveal(cell.Location, isRight);
 
-                // TODO: implement sun shocked on mouse down
-                //_aggregator.Publish<>
+                // publish cells revealed message
+                _aggregator.Publish<CellsRevealedMessage>(new CellsRevealedMessage(_game, cell, revealed.Where(c => c != cell).ToArray()));
 
                 if (_game.State == GameState.Stopped)
                     _aggregator.Publish<GameFinishedMessage>(new GameFinishedMessage(_game));
-            }
-            else if (isLeft && isRight)
-            {
-                // confident reveal
-                try
-                {
-                    _game.Reveal(cell.Location, true);
-                }
-                catch (InvalidOperationException)
-                {
-                    // ignore these errors as no impact to user
-                    return;
-                }
             }
 
             // no more input is accepted if game is no longer running
