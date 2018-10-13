@@ -67,6 +67,8 @@
     <Compile Include="Event\GameStartedMessageTest.cs" />
     <Compile Include="Event\GameFinishedMessageTest.cs" />
     <Compile Include="Event\FlaggedCountChangedMessageTest.cs" />
+    <Compile Include="Event\FieldMouseDownMessageTest.cs" />
+    <Compile Include="Event\CellsRevealedMessageTest.cs" />
     <Compile Include="Model\CellTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\GameTest.cs" />

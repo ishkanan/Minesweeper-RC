@@ -49,8 +49,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Event\CellsRevealedMessage.cs" />
+    <Compile Include="Event\FieldMouseDownMessage.cs" />
     <Compile Include="Event\FlaggedCountChangedMessage.cs" />
     <Compile Include="Event\GameStartedMessage.cs" />
+    <Compile Include="Event\ICellMessage.cs" />
     <Compile Include="Event\IMessage.cs" />
     <Compile Include="Event\GameFinishedMessage.cs" />
     <Compile Include="Model\Cell.cs" />
